@@ -1,0 +1,5 @@
+
+alias test {
+	bdownload($1,"test3.txt");
+	bshell($1,"del /f test3.txt")
+}

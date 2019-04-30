@@ -1,0 +1,61 @@
+###############
+# nameMapper - For the lazy
+###############
+
+
+#shell type file
+alias cat{
+	bshell($1,"type $2");
+} 
+
+#shell ping (ip)
+alias ping{
+	bshell($1,"ping $2");
+}
+beacon_command_register(
+	"ping",
+	"Execute 'ping' from target",
+	"Execute 'ping' from target to specified ip or domain name\n\rUsage: ping 'ip/dns'"
+)
+
+#shell nslookup (ip)
+alias nslookup{
+	bshell($1,"nslookup $2");
+}
+beacon_command_register(
+	"nslookup",
+	"Execute 'nslookup' from target",
+	"Execute 'nslookup' from target to specified ip or domain name\n\rUsage: nslookup 'ip/dns'"
+)
+
+
+#shell ipconfig /all
+alias ipconfig {
+	bshell($1,"ipconfig /all")
+}
+alias ifconfig {
+	bshell($1,"ipconfig /all")
+}
+beacon_command_register(
+	"ifconfig",
+	"Executes 'ipconfig /all'",
+	"Executes 'ipconfig /all' using the shell command"
+)
+beacon_command_register(
+	"ipconfig",
+	"Executes 'ipconfig /all'",
+	"Executes 'ipconfig /all' using the shell command"
+)
+
+
+#shell wmic logicaldisk get caption,description,drivetype,providername,volumename
+alias drivesExtended {
+	bshell($1,"wmic logicaldisk get caption,description,drivetype,providername,volumename");
+}
+beacon_command_register(
+	"drivesExtended",
+	"Lists drives on target with more info",
+	"Simply runs wmic logicaldisk get caption,description,drivetype,providername,volumename on the current beacon");
+
+
+#Alies to find-DA (Chcek beacon log for user hunter, import if not there. Find DA group. Set note)

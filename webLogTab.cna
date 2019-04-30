@@ -1,0 +1,52 @@
+# Experimenting with custom visualizations in Aggressor Script
+# Doesn't really do much right now
+# @001SPARTaN
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.table.*;
+
+import ui.*;
+import table.*;
+
+
+global('$model $console');
+
+
+sub updateConsole {
+    $msg = $1;
+    # Append our message to $console
+    [$console append: $msg];
+}
+
+sub createVisualization {
+
+    # console.Display from ui.*
+    # Because it looks better than a boring text area
+    $console = [new console.Display];
+
+    return $console;
+}
+
+
+on web_hit {
+    $cTime = formatDate("MMM/dd HH:mm:ss Z");
+    if ("20" isin $5){
+        updateConsole("\c7$cTime\c5 - \c9$5\c5 - \c2$3\c5 - \c0$1\c5 - \cD$2\n");
+    }
+    else{
+        updateConsole("\c7$cTime\c5 - \c4$5\c5 - \c2$3\c5 - \c0$1\c5 - \cD$2\n");
+    }
+    
+}
+
+# Add an item to the View menu to show our new visualization
+popup view {
+    item "WebHits" {
+        # Show the visualization
+        $tab = createVisualization();
+        addTab("Web Hits", $tab, "Log of web hits");
+    }
+}

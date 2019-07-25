@@ -41,7 +41,7 @@ sub getScreenshots {
 }
 
 # Add item to the "Cobalt Strike" menu
-popup Reporting {
+popup reporting {
     item "Export Screenshots" {
         getScreenshots();
     }

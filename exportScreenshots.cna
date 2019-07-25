@@ -37,7 +37,7 @@ sub getScreenshots {
         closef($handle);
         println("Saving screenshot: " . $saveFile);
         }
-   } );
+    });
 }
 
 # Add item to the "Cobalt Strike" menu

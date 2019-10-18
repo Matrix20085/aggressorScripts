@@ -2,6 +2,15 @@
 # nameMapper - For the lazy
 ###############
 
+# ToDo: 
+#Alies for 'shell net user "current user" /domain' (Might want to add option for other #users or leave blank for current)
+#Alies for 'shell type "file"'
+#Alies for 'shell ping "IP"'
+#Alies for 'shell nslookup "IP"'
+#Alies for 'shell ipconfig /all'
+#Alies for 'shell wmic logicaldisk get #caption,description,drivetype,providername,volumename'
+#Alies to find-DA (Chcek beacon log for user hunter, import if not there. Find DA group. #Set note)
+
 
 #shell type file
 alias cat{

